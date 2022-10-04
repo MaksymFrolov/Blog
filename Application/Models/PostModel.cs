@@ -1,7 +1,9 @@
-﻿namespace Domain.Entities
+﻿namespace Application.Models
 {
-    public class Post : BaseEntity
+    public class PostModel
     {
+        public int Id { get; set; }
+
         public string Title { get; set; }
 
         public string Content { get; set; }
@@ -10,8 +12,6 @@
 
         public int PersonId { get; set; }
 
-        public Person Person { get; set; }
-
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<int> CommentIds { get; set; }
     }
 }
