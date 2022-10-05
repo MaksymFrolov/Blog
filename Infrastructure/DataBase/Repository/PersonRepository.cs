@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.DataBase.Repository
 {
@@ -39,8 +34,8 @@ namespace Infrastructure.DataBase.Repository
         public async Task<IEnumerable<Person>> GetAllWithDetailsAsync()
         {
             return await contextApp.People
-                .Include(t=>t.Posts)
-                .Include(t=>t.Comments)
+                .Include(t => t.Posts)
+                .Include(t => t.Comments)
                 .ToListAsync();
         }
 

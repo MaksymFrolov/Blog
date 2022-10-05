@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.DataBase.Repository
 {
@@ -42,8 +37,8 @@ namespace Infrastructure.DataBase.Repository
                 .Include(t => t.Person)
                 .Include(t => t.Comments)
                 .ThenInclude(t => t.ParentComment.Person)
-                .Include(t=>t.Comments)
-                .ThenInclude(t=>t.Person)
+                .Include(t => t.Comments)
+                .ThenInclude(t => t.Person)
                 .ToListAsync();
         }
 
