@@ -1,0 +1,36 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Infrastructure.DataBase
+{
+    public class ContextApp : DbContext
+    {
+        public DbSet<Person> People { get; set; }
+
+        public DbSet<Post> Posts { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
+
+        public ContextApp(DbContextOptions options) : base(options) { }
+
+        //public ContextApp() { }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer(@"Server=DESKTOP-SP1DHKR\SQLFORMAX;Database=Blogs;Trusted_Connection=True;");
+        //}
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Post>()
+        //        .HasOne<Person>(t => t.Person)
+        //        .WithMany(t => t.Posts)
+        //        .HasForeignKey(t => t.PersonId)
+        //        .OnDelete(DeleteBehavior.NoAction);
+        //}
+    }
+}

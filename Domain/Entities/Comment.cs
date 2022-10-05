@@ -6,16 +6,16 @@
 
         public DateTime DateCreated { get; set; }
 
+        public int? ParentCommentId { get; set; }
+
         public int PersonId { get; set; }
 
         public int PostId { get; set; }
 
-        public int ParentCommentId { get; set; }
+        public Comment ParentComment { get; set; }
 
         public Person Person { get; set; }
 
         public Post Post { get; set; }
-
-        public Comment ParentComment { get; set; }
     }
 }
