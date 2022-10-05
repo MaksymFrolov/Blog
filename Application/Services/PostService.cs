@@ -110,7 +110,7 @@ namespace Application.Services
             await unitOfWork.SaveAsync();
         }
 
-        void ValidationPost(PostModel model)
+        static void ValidationPost(PostModel model)
         {
             if (model is null)
                 throw new BlogException("Model is null.");
@@ -119,7 +119,7 @@ namespace Application.Services
                 throw new BlogException("Title or Content is empty.");
         }
 
-        void ValidationComment(CommentModel model)
+        static void ValidationComment(CommentModel model)
         {
             if (model is null)
                 throw new BlogException("Model is null.");

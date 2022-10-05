@@ -80,7 +80,7 @@ namespace Application.Services
             await unitOfWork.SaveAsync();
         }
 
-        void Validation(PersonModel model)
+        static void Validation(PersonModel model)
         {
             if (model is null)
                 throw new BlogException("Model is null.");

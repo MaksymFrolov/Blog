@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Infrastructure.Mapper
+namespace Infrastructure.Mappers
 {
     public class BusinessProfile : Profile
     {
