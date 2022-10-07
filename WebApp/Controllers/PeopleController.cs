@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace WebUI.Controllers
+namespace WebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -57,7 +58,7 @@ namespace WebUI.Controllers
 
                 return Ok(model);
             }
-            catch(BlogException ex)
+            catch (BlogException ex)
             {
                 return BadRequest(ex);
             }
