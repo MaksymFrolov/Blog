@@ -23,6 +23,7 @@ export const publicRoutes: IRoute[] = [
     {path:RouteNames.HOME, element:Home},
     {path:RouteNames.POST, element:Post},
     {path:RouteNames.POSTS, element:Posts},
+    {path:RouteNames.PEOPLE, element:People},
     {path:RouteNames.LOGIN, element:Login}
 ]
 

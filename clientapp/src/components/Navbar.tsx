@@ -1,21 +1,52 @@
 import { Layout, Row, Menu } from 'antd'
 import React,{FC} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { RouteNames } from '../route'
+import { useTypedSelector } from '../hooks/useTypedSelector'
+import { RouteNames } from '../router'
 
 const Navbar: FC = () => {
     const navigate = useNavigate()
-    const auth = true
+    const {isAuth}=useTypedSelector(state=>state.auth)
     const publicMenuItems =[
         {
-            key: 1,
+            key:1,
+            onClick:()=>navigate(RouteNames.HOME),
+            label:"Home"
+        },
+        {
+            key: 2,
+            onClick:()=>navigate(RouteNames.POSTS),
+            label:"Posts"
+        },
+        {
+            key:3,
+            onClick:()=>navigate(RouteNames.PEOPLE),
+            label:"People"
+        },
+        {
+            key: 4,
             onClick: () => navigate(RouteNames.LOGIN),
             label:"Login"
-        }
+        },
     ]
     const privateMenuItems =[
         {
             key: 1,
+            onClick: () => navigate(RouteNames.HOME),
+            label:"Home"
+        },
+        {
+            key: 2,
+            onClick: () => navigate(RouteNames.POSTS),
+            label:"Posts"
+        },
+        {
+            key: 3,
+            onClick: () => navigate(RouteNames.PEOPLE),
+            label:"People"
+        },
+        {
+            key: 4,
             onClick: () => navigate(RouteNames.HOME),
             label:"Logout"
         }
@@ -24,7 +55,7 @@ const Navbar: FC = () => {
         <Layout.Header>
             <Row justify="end">
                 {
-                    auth
+                    isAuth
                         ?
                         <>
                             <div style={{ color: 'white' }}>
