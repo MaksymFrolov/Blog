@@ -1,9 +1,7 @@
 import {useDispatch} from "react-redux";
-import {bindActionCreators} from "redux";
-import {allActionCreators} from "../store/reduce/action-creators";
-import {useMemo} from "react";
+import {ActionCreatorsMapObject, bindActionCreators} from "redux";
 
-export const useActions = () => {
+export const useActions = (action: ActionCreatorsMapObject) => {
     const dispatch = useDispatch();
-    return bindActionCreators(allActionCreators, dispatch);
+    return bindActionCreators(action, dispatch);
 }

@@ -2,13 +2,14 @@ import { Button, Checkbox, Form, Input } from 'antd'
 import React, { FC, useState } from 'react'
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from '../hooks/useTypedSelector'
+import { AuthActionCreators } from '../store/reduce/auth/action-creators'
 import { rules } from '../utils/rules'
 
 const LoginForm: FC = () => {
   const { error, isLoading } = useTypedSelector(state => state.auth)
-  const [username,setLogin]=useState('')
-  const [password,setPassword]=useState('')
-  const {login}=useActions()
+  const [username, setLogin] = useState('')
+  const [password, setPassword] = useState('')
+  const { login } = useActions(AuthActionCreators)
   const submit = () => {
     login(username, password)
   }

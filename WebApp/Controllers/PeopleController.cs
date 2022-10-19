@@ -15,9 +15,9 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PersonModel>>> Get()
+        public async Task<ActionResult<IEnumerable<PersonModel>>> Get([FromQuery] PersonFilterSearchModel filter)
         {
-            return Ok(await personService.GetAllAsync());
+            return Ok(await personService.GetAllPersonWithFilterAsync(filter));
         }
 
         [HttpGet("{id}")]
@@ -29,6 +29,40 @@ namespace WebApp.Controllers
                 return NotFound("Person not found.");
 
             return Ok(person);
+        }
+
+        [HttpGet("{id}/posts")]
+        public async Task<ActionResult<IEnumerable<PostModel>>> GetAllPostByPersonId(int id, [FromQuery] PostFilterSearchModel filter)
+        {
+            filter.PersonId = id;
+
+            try
+            {
+                var list = await personService.GetAllPostWithFilterAsync(filter);
+
+                return Ok(list);
+            }
+            catch(BlogException ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("{id}/comments")]
+        public async Task<ActionResult<IEnumerable<CommentModel>>> GetAllCommentsByPersonId(int id, [FromQuery] CommentFilterSearchModel filter)
+        {
+            filter.PersonId = id;
+
+            try
+            {
+                var list = await personService.GetAllCommentWithFilterAsync(filter);
+
+                return Ok(list);
+            }
+            catch(BlogException ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpPost]

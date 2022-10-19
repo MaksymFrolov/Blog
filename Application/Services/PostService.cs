@@ -53,6 +53,28 @@ namespace Application.Services
             return map.Convert<IEnumerable<PostModel>, IEnumerable<Post>>(list);
         }
 
+        public async Task<IEnumerable<PostModel>> GetAllPostWithFilterAsync(PostFilterSearchModel model)
+        {
+            var list = await unitOfWork.PostRepository.GetAllWithDetailsAsync();
+
+            if (model.PersonName is string name)
+                list = list.Where(t => t.Person.FirstName == name);
+
+            else if(model.Title is string title)
+                list = list.Where(t => t.Title == title);
+
+            if (model.Date)
+                list = list.OrderBy(t => t.DateCreated);
+
+            if (model.Order)
+                list = list.OrderByDescending(t => t.Id);
+
+            if (model.Page is int page && model.Limit is int limit)
+                list = list.Skip(page * limit).Take(limit);
+
+            return map.Convert<IEnumerable<PostModel>, IEnumerable<Post>>(list);
+        }
+
         public async Task<IEnumerable<CommentModel>> GetAllPostCommentAsync(int postModelId)
         {
             var list = (await unitOfWork
@@ -63,22 +85,24 @@ namespace Application.Services
             return map.Convert<IEnumerable<CommentModel>, IEnumerable<Comment>>(list);
         }
 
+        public async Task<IEnumerable<CommentModel>> GetAllCommentWithFilterAsync(CommentFilterSearchModel model)
+        {
+            if (model.PostId is null)
+                throw new BlogException("Id s nill.");
+
+            var list = await GetAllPostCommentAsync((int)model.PostId);
+
+            if (model.Page is int page && model.Limit is int limit)
+                list = list.Skip(page * limit).Take(limit);
+
+            return list;
+        }
+
         public async Task<PostModel> GetByIdAsync(int id)
         {
             var post = await unitOfWork.PostRepository.GetByIdWithDetailsAsync(id);
 
             return map.Convert<PostModel, Post>(post);
-        }
-
-        public async Task<IEnumerable<PostModel>> GetPostsByPeriodAsync(DateTime startDate, DateTime endDate)
-        {
-            var list = (await unitOfWork
-                .PostRepository
-                .GetAllWithDetailsAsync())
-                .Where(t => t.DateCreated >= startDate && t.DateCreated <= endDate);
-
-            return map.Convert<IEnumerable<PostModel>, IEnumerable<Post>>(list);
-
         }
 
         public async Task RemoveCommentAsync(int commentModelId)

@@ -2,16 +2,16 @@ import { IUser } from "../../../models/IUser"
 
 export interface AuthState {
     isAuth: boolean
-    user:IUser
-    isLoading:boolean
-    error:string
+    user: IUser
+    isLoading: boolean
+    error: string
 }
 
 export enum AuthActionEnum {
     SET_AUTH = 'SET_AUTH',
-    SET_ERROR = 'SET_ERROR',
-    SET_USER='SET_USER',
-    SET_IS_LOADING='SET_IS_LOADING'
+    SET_ERROR = 'SET_AUTH_ERROR',
+    SET_USER = 'SET_AUTH_USER',
+    SET_IS_LOADING = 'SET_AUTH_IS_LOADING'
 }
 
 export interface SetAuthAction {
@@ -22,7 +22,7 @@ export interface SetErrorAction {
     type: AuthActionEnum.SET_ERROR
     payload: string
 }
-export interface SetUserAction {
+export interface SetAuthUserAction {
     type: AuthActionEnum.SET_USER
     payload: IUser
 }
@@ -35,4 +35,4 @@ export type AuthAction =
     SetAuthAction |
     SetErrorAction |
     SetIsLoadingAction |
-    SetUserAction
+    SetAuthUserAction

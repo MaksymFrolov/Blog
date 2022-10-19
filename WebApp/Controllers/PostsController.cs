@@ -15,9 +15,9 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostModel>>> Get()
+        public async Task<ActionResult<IEnumerable<PostModel>>> Get([FromQuery] PostFilterSearchModel filter)
         {
-            return Ok(await postService.GetAllAsync());
+            return Ok(await postService.GetAllPostWithFilterAsync(filter));
         }
 
         [HttpGet("{id}")]
@@ -31,16 +31,19 @@ namespace WebApp.Controllers
             return Ok(post);
         }
 
-        [HttpGet("period")]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetByPeriod([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
-        {
-            return Ok(await postService.GetPostsByPeriodAsync(startDate, endDate));
-        }
-
         [HttpGet("{id}/comments")]
-        public async Task<ActionResult<IEnumerable<CommentModel>>> GetComments(int id)
+        public async Task<ActionResult<IEnumerable<CommentModel>>> GetComments(int id, [FromQuery] CommentFilterSearchModel filter)
         {
-            return Ok(await postService.GetAllPostCommentAsync(id));
+            filter.PostId = id;
+
+            try
+            {
+                return Ok(await postService.GetAllCommentWithFilterAsync(filter));
+            }
+            catch (BlogException ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpPost]

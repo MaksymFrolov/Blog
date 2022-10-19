@@ -4,12 +4,12 @@ import Navbar from './components/Navbar';
 import { Layout } from 'antd'
 import './App.css'
 
-const App:FC = () => {
+const App: FC = () => {
   return (
     <Layout>
-      <Navbar/>
+      <Navbar />
       <Layout.Content>
-        <AppRouter/>
+        <AppRouter />
       </Layout.Content>
     </Layout>
   )

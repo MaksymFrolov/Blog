@@ -42,6 +42,22 @@ namespace Application.Services
             return map.Convert<IEnumerable<PersonModel>, IEnumerable<Person>>(list);
         }
 
+        public async Task<IEnumerable<PersonModel>> GetAllPersonWithFilterAsync(PersonFilterSearchModel model)
+        {
+            var list = await GetAllAsync();
+
+            if (model.PersonName is string name)
+                list = list.Where(t => t.FirstName == name);
+
+            if (model.Order)
+                list = list.OrderByDescending(t => t.Id);
+
+            if(model.Page is int page && model.Limit is int limit)
+                list = list.Skip(page * limit).Take(limit);
+
+            return list;
+        }
+
         public async Task<IEnumerable<CommentModel>> GetAllPersonCommentsAsync(int personModelId)
         {
             var list = (await unitOfWork
@@ -52,6 +68,19 @@ namespace Application.Services
             return map.Convert<IEnumerable<CommentModel>, IEnumerable<Comment>>(list);
         }
 
+        public async Task<IEnumerable<CommentModel>> GetAllCommentWithFilterAsync(CommentFilterSearchModel model)
+        {
+            if (model.PersonId is null)
+                throw new BlogException("Id s nill.");
+
+            var list = await GetAllPersonCommentsAsync((int)model.PersonId);
+
+            if (model.Page is int page && model.Limit is int limit)
+                list = list.Skip(page * limit).Take(limit);
+
+            return list;
+        }
+
         public async Task<IEnumerable<PostModel>> GetAllPersonPostsAsync(int personModelId)
         {
             var list = (await unitOfWork
@@ -60,6 +89,19 @@ namespace Application.Services
                 .Posts;
 
             return map.Convert<IEnumerable<PostModel>, IEnumerable<Post>>(list);
+        }
+
+        public async Task<IEnumerable<PostModel>> GetAllPostWithFilterAsync(PostFilterSearchModel model)
+        {
+            if (model.PersonId is null)
+                throw new BlogException("Id s nill.");
+
+            var list = await GetAllPersonPostsAsync((int)model.PersonId);
+
+            if (model.Page is int page && model.Limit is int limit)
+                list = list.Skip(page * limit).Take(limit);
+
+            return list;
         }
 
         public async Task<PersonModel> GetByIdAsync(int id)

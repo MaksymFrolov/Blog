@@ -1,4 +1,4 @@
-export interface IRegUser{
+export interface IRegUser {
     id: number,
     name: string,
     username: string

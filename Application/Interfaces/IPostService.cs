@@ -6,7 +6,9 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<CommentModel>> GetAllPostCommentAsync(int postModelId);
 
-        Task<IEnumerable<PostModel>> GetPostsByPeriodAsync(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<CommentModel>> GetAllCommentWithFilterAsync(CommentFilterSearchModel model);
+
+        Task<IEnumerable<PostModel>> GetAllPostWithFilterAsync(PostFilterSearchModel model);
 
         Task AddCommentAsync(CommentModel commentModel);
 

@@ -7,7 +7,7 @@ const Login: FC = () => {
     <Layout>
       <Row justify='center' align='middle' className='h100'>
         <Card>
-          <LoginForm/>
+          <LoginForm />
         </Card>
       </Row>
     </Layout>
