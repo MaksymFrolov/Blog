@@ -2,6 +2,7 @@
 
 const context = [
     "/api/posts",
+    "/api/people",
 ];
 
 module.exports = function (app) {

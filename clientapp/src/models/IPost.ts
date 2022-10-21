@@ -1,6 +1,8 @@
 export interface IPost {
     id: number
-    userId: number
+    personId: number
     title: string
-    body: string
+    content: string
+    dateCreated: Date
+    commentIds: number[]
 }

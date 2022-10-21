@@ -16,7 +16,6 @@ export const PostsActionCreators = {
             if (page != undefined) {
                 dispatch(PostsActionCreators.setPage(++page))
             }
-            setTimeout(async () => {
                 const response = await PostService.getPosts(page, limit)
                 const mockPosts = response.data
                 if (mockPosts.length != 0 && posts != undefined) {
@@ -28,7 +27,6 @@ export const PostsActionCreators = {
                 else {
                     dispatch(PostsActionCreators.setIsEnough(false))
                 }
-            }, 1000)
         }
         catch (e) {
             dispatch(PostsActionCreators.setError((e as Error).message))

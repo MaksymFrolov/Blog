@@ -35,7 +35,7 @@ namespace Infrastructure.DataBase.Repository
         {
             return await contextApp.Comments
                 .Include(t => t.Person)
-                .Include(t => t.ParentComment.Person)
+                .Include(t => t.Post)
                 .ToListAsync();
         }
 
@@ -48,7 +48,7 @@ namespace Infrastructure.DataBase.Repository
         {
             return await contextApp.Comments
                 .Include(t => t.Person)
-                .Include(t => t.ParentComment.Person)
+                .Include(t => t.Post)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 

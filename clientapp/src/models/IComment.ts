@@ -1,7 +1,7 @@
 export interface IComment {
     id: number
     postId: number
-    name: string
-    email: string
-    body: string
+    createdDate: Date
+    content: string
+    personId: number
 }
