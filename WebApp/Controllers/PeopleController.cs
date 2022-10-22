@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers
@@ -80,7 +81,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<ActionResult> Update(int id, [FromBody] PersonModel model)
         {
             if (id != model.Id)
@@ -98,7 +99,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             await personService.DeleteAsync(id);

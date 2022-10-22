@@ -17,9 +17,15 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IMap, Map>();
 
+builder.Services.AddScoped<IToken, Token>();
+
 builder.Services.AddTransient<IPersonService, PersonService>();
 
 builder.Services.AddTransient<IPostService, PostService>();
+
+builder.Services.AddTransient<ITokenService, TokenService>();
+
+builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddAuthentication(t =>
 {
@@ -33,9 +39,9 @@ builder.Services.AddAuthentication(t =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "MyServer",
-        ValidAudience = "MyClient",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("maxim`sSekretKey"))
+        ValidIssuer = TokenParameters.ISSUER,
+        ValidAudience = TokenParameters.AUDIENCE,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenParameters.SEKRET_KEY))
     };
 });
 

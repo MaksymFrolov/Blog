@@ -1,65 +1,81 @@
 ﻿using Application.Interfaces;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
+using Application.Models;
+using Application.Validation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
     public class TokenService : ITokenService
     {
-        public string GenerateAccessToken(IEnumerable<Claim> claims)
+        readonly IUnitOfWork unitOfWork;
+
+        readonly IToken token;
+
+        public TokenService(IUnitOfWork unitOfWork, IToken token)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("maxim`sSekretKey"));
-
-            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-            var tokeOptions = new JwtSecurityToken(
-                issuer: "MyServer",
-                audience: "MyClient",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(5),
-                signingCredentials: signinCredentials
-                );
-
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-
-            return tokenString;
+            this.unitOfWork = unitOfWork;
+            this.token = token;
         }
 
-        public string GenerateRefreshToken()
+        public async Task<AuthenticatedResponseModel> Refresh(TokenApiModel tokenApiModel)
         {
-            var randomNumber = new byte[32];
+            Validation(tokenApiModel);
 
-            using var rng = RandomNumberGenerator.Create();
+            var accessToken = tokenApiModel.AccessToken;
 
-            rng.GetBytes(randomNumber);
+            var refreshToken = tokenApiModel.RefreshToken;
 
-            return Convert.ToBase64String(randomNumber);
-        }
+            var principal = token.GetPrincipalFromExpiredToken(accessToken);
 
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
-        {
-            var tokenValidationParameters = new TokenValidationParameters
+            var username = principal.Identity.Name;
+
+            var user = (await unitOfWork.PersonRepository.GetAllAsync())
+                .FirstOrDefault(t => t.Login == username);
+
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+                throw new BlogException("Invalid request.");
+
+            var newAccessToken = token.GenerateAccessToken(principal.Claims);
+
+            var newRefreshToken = token.GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+
+            return new AuthenticatedResponseModel()
             {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("maxim`sSekretKey")),
-                ValidateLifetime = false
+                Token = newAccessToken,
+                RefreshToken = newRefreshToken
             };
+        }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
+        public async Task Revoke(TokenApiModel tokenApiModel)
+        {
+            Validation(tokenApiModel);
 
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            var principal = token.GetPrincipalFromExpiredToken(tokenApiModel.AccessToken);
 
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            var username = principal.Identity.Name;
 
-            if (jwtSecurityToken is not null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token.");
+            var user = (await unitOfWork.PersonRepository.GetAllAsync())
+                .FirstOrDefault(t => t.Login == username);
 
-            return principal;
+            if (user == null)
+                throw new BlogException("User not found.");
+
+            user.RefreshToken = null;
+        }
+
+        static void Validation(TokenApiModel model)
+        {
+            if (model is null)
+                throw new BlogException("Model is null.");
+
+            if (model.AccessToken == string.Empty || model.RefreshToken == string.Empty)
+                throw new BlogException("Access token or refresh token is empty.");
         }
     }
 }

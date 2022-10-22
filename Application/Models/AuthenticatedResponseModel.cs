@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.Models
 {
-    public class LoginModel
+    public class AuthenticatedResponseModel
     {
-        public string? Login { get; set; }
+        public string? Token { get; set; }
 
-        public string? Password { get; set; }
+        public string? RefreshToken { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers
@@ -46,7 +47,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult> Add([FromBody] PostModel post)
         {
             try
@@ -61,7 +62,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpPost("{id}/comments")]
+        [HttpPost("{id}/comments"), Authorize]
         public async Task<ActionResult> Add(int id, [FromBody] CommentModel comment)
         {
             comment.Id = id;
@@ -78,7 +79,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<ActionResult> Update(int id, [FromBody] PostModel post)
         {
             if (id != post.Id)
@@ -96,7 +97,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpPut("{postId}/comments/{commentId}")]
+        [HttpPut("{postId}/comments/{commentId}"), Authorize]
         public async Task<ActionResult> UpdateComment(int postId, int commentId, [FromBody] CommentModel comment)
         {
             if (comment.Id != commentId || comment.PostId != postId)
@@ -114,7 +115,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             await postService.DeleteAsync(id);
@@ -122,7 +123,7 @@ namespace WebApp.Controllers
             return Ok();
         }
 
-        [HttpDelete("{postId}/comments/{commentId}")]
+        [HttpDelete("{postId}/comments/{commentId}"), Authorize]
         public async Task<ActionResult> DeleteComment(int postId, int commentId)
         {
             await postService.RemoveCommentAsync(commentId);

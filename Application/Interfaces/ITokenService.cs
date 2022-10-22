@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Application.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,10 +9,8 @@ namespace Application.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateAccessToken(IEnumerable<Claim> claims);
+        Task<AuthenticatedResponseModel> Refresh(TokenApiModel tokenApiModel);
 
-        string GenerateRefreshToken();
-
-        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+        Task Revoke(TokenApiModel tokenApiModel);
     }
 }
