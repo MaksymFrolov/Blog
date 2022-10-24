@@ -10,25 +10,23 @@ export const CommentsActionCreators = {
     setPage: (payload: number): SetPageAction => ({ type: CommentsActionEnum.SET_PAGE, payload }),
     setIsEnough: (payload: boolean): SetIsEnoughAction => ({ type: CommentsActionEnum.SET_IS_ENOUGH, payload }),
     setStart: (): SetStartAction => ({ type: CommentsActionEnum.SET_START }),
-    loadComments: (page?: number, limit?: number, comments?: IComment[]) => async (dispatch: AppDispatch) => {
+    loadCommentsByPostId: (id: number, page?: number, limit?: number, comments?: IComment[]) => async (dispatch: AppDispatch) => {
         try {
             dispatch(CommentsActionCreators.setStart())
             if (page != undefined) {
                 dispatch(CommentsActionCreators.setPage(++page))
             }
-            setTimeout(async () => {
-                const response = await CommentService.getComment(page, limit)
-                const mockComments = response.data
-                if (mockComments.length != 0 && comments != undefined) {
-                    dispatch(CommentsActionCreators.setComments([...comments, ...mockComments]))
-                }
-                else if (mockComments.length != 0) {
-                    dispatch(CommentsActionCreators.setComments(mockComments))
-                }
-                else {
-                    dispatch(CommentsActionCreators.setIsEnough(false))
-                }
-            }, 1000)
+            const response = await CommentService.getCommentByPostId(id, page, limit)
+            const mockComments = response.data
+            if (mockComments.length != 0 && comments != undefined) {
+                dispatch(CommentsActionCreators.setComments([...comments, ...mockComments]))
+            }
+            else if (mockComments.length != 0) {
+                dispatch(CommentsActionCreators.setComments(mockComments))
+            }
+            else {
+                dispatch(CommentsActionCreators.setIsEnough(false))
+            }
         }
         catch (e) {
             dispatch(CommentsActionCreators.setError((e as Error).message))

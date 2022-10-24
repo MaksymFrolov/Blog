@@ -16,19 +16,17 @@ export const UsersActionCreators = {
             if (page != undefined) {
                 dispatch(UsersActionCreators.setPage(++page))
             }
-            setTimeout(async () => {
-                const response = await RegUserService.getRegUsers(page, limit)
-                const mockUsers = response.data
-                if (mockUsers.length != 0 && users != undefined) {
-                    dispatch(UsersActionCreators.setUsers([...users, ...mockUsers]))
-                }
-                else if (mockUsers.length != 0) {
-                    dispatch(UsersActionCreators.setUsers(mockUsers))
-                }
-                else {
-                    dispatch(UsersActionCreators.setIsEnough(false))
-                }
-            }, 1000)
+            const response = await RegUserService.getRegUsers(page, limit)
+            const mockUsers = response.data
+            if (mockUsers.length != 0 && users != undefined) {
+                dispatch(UsersActionCreators.setUsers([...users, ...mockUsers]))
+            }
+            else if (mockUsers.length != 0) {
+                dispatch(UsersActionCreators.setUsers(mockUsers))
+            }
+            else {
+                dispatch(UsersActionCreators.setIsEnough(false))
+            }
         }
         catch (e) {
             dispatch(UsersActionCreators.setError((e as Error).message))

@@ -11,16 +11,14 @@ export const PostActionCreators = {
     loadPost: (id: number) => async (dispatch: AppDispatch) => {
         try {
             dispatch(PostActionCreators.setIsLoading(true))
-            setTimeout(async () => {
-                const response = await PostService.getPostById(id)
-                const mockPost = response.data
-                if (mockPost) {
-                    dispatch(PostActionCreators.setPost(mockPost))
-                }
-                else {
-                    dispatch(PostActionCreators.setError("Not found."))
-                }
-            }, 1000)
+            const response = await PostService.getPostById(id)
+            const mockPost = response.data
+            if (mockPost) {
+                dispatch(PostActionCreators.setPost(mockPost))
+            }
+            else {
+                dispatch(PostActionCreators.setError("Not found."))
+            }
         }
         catch (e) {
             dispatch(PostActionCreators.setError((e as Error).message))

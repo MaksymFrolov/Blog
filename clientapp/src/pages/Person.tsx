@@ -12,15 +12,21 @@ const Person: FC = () => {
   useEffect(() => {
     loadUser(param.id)
   }, [])
+  const covertDate = (date: Date)=>{
+    return new Date(date).toLocaleDateString()
+  }
   return (
     <Layout>
       <Row justify='center' align='middle' className='h100'>
         {error && <div style={{ color: 'red' }}>
           {error}
         </div>}
-        <Card hoverable title={<a>Person Form</a>} style={{ width: 500, height: 600 }} loading={isLoading}>
-          <p>{user.name}</p>
-          <p>{user.username}</p>
+        <Card hoverable title={<a>Person Form</a>} style={{ width: 400, height: 300 }} loading={isLoading}>
+            <p>Firstname: {user.firstName}</p>
+            <p>Lastname: {user.lastName}</p>
+            <p>Birthdate: {<>{covertDate(user.birthDate)}</>}</p>
+            <p><a>Commenth: {user.commentIds?.length}</a></p>
+            <p><a>Posts: {user.postIds?.length}</a></p>
         </Card>
       </Row>
     </Layout>

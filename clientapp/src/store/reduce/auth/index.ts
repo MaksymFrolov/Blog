@@ -1,3 +1,4 @@
+import { IToken } from "../../../models/IToken"
 import { IUser } from "../../../models/IUser"
 import { AuthAction, AuthActionEnum, AuthState } from "./types"
 
@@ -6,7 +7,8 @@ const initialState: AuthState = {
     isAuth: false,
     error: '',
     isLoading: false,
-    user: {} as IUser
+    user: {} as IUser,
+    token: {} as IToken
 }
 
 export default function authReducer(state = initialState, action: AuthAction): AuthState {
@@ -15,6 +17,8 @@ export default function authReducer(state = initialState, action: AuthAction): A
             return { ...state, isAuth: action.payload, isLoading: false }
         case AuthActionEnum.SET_USER:
             return { ...state, user: action.payload, isLoading: false }
+        case AuthActionEnum.SET_TOKEN:
+            return { ...state, token: action.payload }
         case AuthActionEnum.SET_ERROR:
             return { ...state, error: action.payload, isLoading: false }
         case AuthActionEnum.SET_IS_LOADING:

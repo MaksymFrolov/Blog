@@ -45,6 +45,8 @@ namespace Application.Services
 
             user.RefreshToken = newRefreshToken;
 
+            await unitOfWork.SaveAsync();
+
             return new AuthenticatedResponseModel()
             {
                 Token = newAccessToken,
@@ -67,6 +69,8 @@ namespace Application.Services
                 throw new BlogException("User not found.");
 
             user.RefreshToken = null;
+
+            await unitOfWork.SaveAsync();
         }
 
         static void Validation(TokenApiModel model)

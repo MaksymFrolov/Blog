@@ -26,6 +26,9 @@ namespace Infrastructure.DataBase
         //        .WithMany(t => t.Posts)
         //        .HasForeignKey(t => t.PersonId)
         //        .OnDelete(DeleteBehavior.NoAction);
+        //    modelBuilder.Entity<Person>()
+        //            .Property(e => e.BirthDate)
+        //            .HasColumnType("date");
         //}
     }
 }

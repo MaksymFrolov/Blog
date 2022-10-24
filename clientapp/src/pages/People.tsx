@@ -13,34 +13,10 @@ import { IRegUser } from '../models/IRegUser'
 const People: FC = () => {
   const navigate = useNavigate()
   const { error, isLoading, users, page, enough } = useTypedSelector(state => state.users)
-  const { posts } = useTypedSelector(t => t.posts)
-  const { comments } = useTypedSelector(t => t.comments)
   const { loadUsers } = useActions(UsersActionCreators)
-  const { loadPosts } = useActions(PostsActionCreators)
-  const { loadComments } = useActions(CommentsActionCreators)
   useEffect(() => {
-    loadUsers(0, 5)
-    loadComments()
-    loadPosts()
+    loadUsers(-1, 5)
   }, [])
-  const countComment = (user: IRegUser) => {
-    let sum = 0
-    // comments.map(t => {
-    //   if (t.email === user.id) {
-    //     sum++
-    //   }
-    // })
-    return sum
-  }
-  const countPost = (user: IRegUser) => {
-    let sum = 0
-    posts.map(t => {
-      if (t.userId === user.id) {
-        sum++
-      }
-    })
-    return sum
-  }
   return (
     <Layout
       id='scrollableDiv'
@@ -71,19 +47,20 @@ const People: FC = () => {
             dataSource={users}
             renderItem={item => (
               <Row justify='center' align='middle'>
-                <List.Item key={item.username}>
+                <List.Item key={item.id}>
                   <Card
                     hoverable
                     onClick={() => { navigate(`/people/${item.id}`) }}
-                    title={<a>{item.name}</a>}
+                    title={<a>{item.firstName}</a>}
                     style={{ width: 300, marginRight: 15, marginLeft: 15 }}>
-                    <p>{item.name}</p>
-                    <p>{item.username}</p>
+                    <p>{item.firstName}</p>
+                    <p>{item.lastName}</p>
+                    <p>{new Date(item.birthDate).getDate()}</p>
                     <Divider plain style={{ marginBottom: 5 }} />
                     <MessageOutlined style={{ marginRight: 5 }} />
-                    {countComment(item) }
+                    {item.commentIds.length}
                     <ContainerOutlined style={{ marginRight: 5 , marginLeft:10}}/>
-                    {countPost(item)}
+                    {item.postIds.length}
                   </Card>
                 </List.Item>
               </Row>

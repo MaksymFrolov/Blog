@@ -3,6 +3,8 @@
 const context = [
     "/api/posts",
     "/api/people",
+    "/api/auth",
+    "/api/tokens"
 ];
 
 module.exports = function (app) {

@@ -3,3 +3,8 @@
 .h100{
     min-height: calc(100vh - 64px);
 }
+
+.rightblock{
+    padding-left: 500;
+
+}

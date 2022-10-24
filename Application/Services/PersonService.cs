@@ -99,7 +99,7 @@ namespace Application.Services
             var list = await GetAllPersonPostsAsync((int)model.PersonId);
 
             if (model.Page is int page && model.Limit is int limit)
-                list = list.Skip(page * limit).Take(limit);
+                list = list.Skip((page - 1) * limit).Take(limit);
 
             return list;
         }

@@ -16,7 +16,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<ActionResult<AuthenticatedResponseModel>> Refresh(TokenApiModel tokenApiModel)
+        public async Task<ActionResult<AuthenticatedResponseModel>> Refresh([FromBody] TokenApiModel tokenApiModel)
         {
             try
             {
@@ -31,11 +31,11 @@ namespace WebApp.Controllers
         }
 
         [HttpPost("revoke"), Authorize]
-        public IActionResult Revoke(TokenApiModel tokenApiModel)
+        public async Task<ActionResult> Revoke([FromBody] TokenApiModel tokenApiModel)
         {
             try
             {
-                tokenService.Revoke(tokenApiModel);
+                await tokenService.Revoke(tokenApiModel);
 
                 return Ok();
             }

@@ -16,17 +16,17 @@ export const PostsActionCreators = {
             if (page != undefined) {
                 dispatch(PostsActionCreators.setPage(++page))
             }
-                const response = await PostService.getPosts(page, limit)
-                const mockPosts = response.data
-                if (mockPosts.length != 0 && posts != undefined) {
-                    dispatch(PostsActionCreators.setPosts([...posts, ...mockPosts]))
-                }
-                else if (mockPosts.length != 0) {
-                    dispatch(PostsActionCreators.setPosts(mockPosts))
-                }
-                else {
-                    dispatch(PostsActionCreators.setIsEnough(false))
-                }
+            const response = await PostService.getPosts(page, limit)
+            const mockPosts = response.data
+            if (mockPosts.length != 0 && posts != undefined) {
+                dispatch(PostsActionCreators.setPosts([...posts, ...mockPosts]))
+            }
+            else if (mockPosts.length != 0) {
+                dispatch(PostsActionCreators.setPosts(mockPosts))
+            }
+            else {
+                dispatch(PostsActionCreators.setIsEnough(false))
+            }
         }
         catch (e) {
             dispatch(PostsActionCreators.setError((e as Error).message))

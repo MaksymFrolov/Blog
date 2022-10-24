@@ -60,7 +60,7 @@ namespace Application.Services
             if (model.PersonName is string name)
                 list = list.Where(t => t.Person.FirstName == name);
 
-            else if(model.Title is string title)
+            else if (model.Title is string title)
                 list = list.Where(t => t.Title == title);
 
             if (model.Date)
@@ -70,7 +70,7 @@ namespace Application.Services
                 list = list.OrderByDescending(t => t.Id);
 
             if (model.Page is int page && model.Limit is int limit)
-                list = list.Skip(page * limit).Take(limit);
+                list = list.Skip((page - 1) * limit).Take(limit);
 
             return map.Convert<IEnumerable<PostModel>, IEnumerable<Post>>(list);
         }
@@ -93,7 +93,7 @@ namespace Application.Services
             var list = await GetAllPostCommentAsync((int)model.PostId);
 
             if (model.Page is int page && model.Limit is int limit)
-                list = list.Skip(page * limit).Take(limit);
+                list = list.Skip((page - 1) * limit).Take(limit);
 
             return list;
         }

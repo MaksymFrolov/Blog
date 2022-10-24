@@ -40,6 +40,8 @@ namespace Application.Services
 
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
 
+            await unitOfWork.SaveAsync();
+
             return new AuthenticatedResponseModel
             {
                 Token = accessToken,

@@ -14,28 +14,24 @@ const Posts: FC = () => {
   const navigate = useNavigate()
   const { error, posts, isLoading, enough, page } = useTypedSelector(t => t.posts)
   const { users } = useTypedSelector(t => t.users)
-  const { comments } = useTypedSelector(t => t.comments)
   const { loadPosts } = useActions(PostsActionCreators)
   const { loadUsers } = useActions(UsersActionCreators)
-  const { loadComments } = useActions(CommentsActionCreators)
   const findUser = (post: IPost) => {
-    const user = users.find(t => t.id === post.userId)
-    return user?.name
-  }
-  const countComment = (post: IPost) => {
-    let sum = 0
-    comments.map(t => {
-      if (t.postId === post.id) {
-        sum++
-      }
-    })
-    return sum
+    const user = users.find(t => t.id === post.personId)
+    return user?.firstName
   }
   useEffect(() => {
     loadPosts(0, 5, [])
     loadUsers()
-    loadComments()
   }, [])
+  const sliceContent = (content: string) => {
+    if (content.length > 1000) {
+      return content.slice(0, 1000) + "..."
+    }
+    else {
+      return content
+    }
+  }
   return (
     <Layout
       id='scrollableDiv'
@@ -69,14 +65,29 @@ const Posts: FC = () => {
                   style={{ width: 600, marginRight: 15, marginLeft: 15 }}
                   onClick={() => { navigate(`/posts/${item.id}`) }}
                   extra={
-                    <a onClick={() => { navigate(`/people/${item.id}`) }}>
+                    <a onClick={() => { navigate(`/people/${item.personId}`) }}>
                       {findUser(item)}
                     </a>
                   }>
-                  <p>{item.body}</p>
+                  <p>
+                    {
+                      sliceContent(item.content)
+                    }
+                  </p>
                   <Divider plain style={{ marginBottom: 5 }} />
-                  <MessageOutlined style={{ marginRight: 5 }} />
-                  {countComment(item)}
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div>
+                      <MessageOutlined style={{ marginRight: 5 }} />
+                      {item.commentIds.length}
+                    </div>
+                    <div>
+                        Posted: <>
+                          {
+                            item.dateCreated
+                          }
+                        </>
+                    </div>
+                  </div>
                 </Card>
               </List.Item>
             )}

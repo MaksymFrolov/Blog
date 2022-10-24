@@ -1,5 +1,8 @@
 export interface IRegUser {
     id: number,
-    name: string,
-    username: string
+    firstName: string,
+    lastName: string,
+    birthDate: Date,
+    postIds: number[],
+    commentIds: number[]
 }

@@ -11,16 +11,14 @@ export const UserActionCreators = {
     loadUser: (id: number) => async (dispatch: AppDispatch) => {
         try {
             dispatch(UserActionCreators.setIsLoading(true))
-            setTimeout(async () => {
-                const response = await RegUserService.getRegUsersById(id)
-                const mockUser = response.data
-                if (mockUser) {
-                    dispatch(UserActionCreators.setUser(mockUser))
-                }
-                else {
-                    dispatch(UserActionCreators.setError("Not Found."))
-                }
-            }, 1000)
+            const response = await RegUserService.getRegUsersById(id)
+            const mockUser = response.data
+            if (mockUser) {
+                dispatch(UserActionCreators.setUser(mockUser))
+            }
+            else {
+                dispatch(UserActionCreators.setError("Not Found."))
+            }
         }
         catch (e) {
             dispatch(UserActionCreators.setError((e as Error).message))
