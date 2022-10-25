@@ -1,9 +1,9 @@
 import { IToken } from "../../../models/IToken"
-import { IUser } from "../../../models/IUser"
+import { ILogUser } from "../../../models/ILogUser"
 
 export interface AuthState {
     isAuth: boolean
-    user: IUser
+    user: ILogUser
     token: IToken
     isLoading: boolean
     error: string
@@ -27,7 +27,7 @@ export interface SetErrorAction {
 }
 export interface SetAuthUserAction {
     type: AuthActionEnum.SET_USER
-    payload: IUser
+    payload: ILogUser
 }
 export interface SetAuthTokenAction {
     type: AuthActionEnum.SET_TOKEN

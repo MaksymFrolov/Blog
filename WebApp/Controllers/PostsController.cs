@@ -15,7 +15,7 @@ namespace WebApp.Controllers
             this.postService = postService;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<PostModel>>> Get([FromQuery] PostFilterSearchModel filter)
         {
             return Ok(await postService.GetAllPostWithFilterAsync(filter));

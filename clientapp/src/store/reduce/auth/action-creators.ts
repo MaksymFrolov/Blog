@@ -2,11 +2,11 @@ import axios from "axios";
 import { AppDispatch } from "../..";
 import UserService from "../../../api/UserService";
 import { IToken } from "../../../models/IToken";
-import { IUser } from "../../../models/IUser";
+import { ILogUser } from "../../../models/ILogUser";
 import { AuthActionEnum, SetAuthAction, SetErrorAction, SetIsLoadingAction, SetAuthUserAction, SetAuthTokenAction } from "./types";
 
 export const AuthActionCreators = {
-    setUser: (user: IUser): SetAuthUserAction => ({ type: AuthActionEnum.SET_USER, payload: user }),
+    setUser: (user: ILogUser): SetAuthUserAction => ({ type: AuthActionEnum.SET_USER, payload: user }),
     setIsAuth: (auth: boolean): SetAuthAction => ({ type: AuthActionEnum.SET_AUTH, payload: auth }),
     setIsLoading: (payload: boolean): SetIsLoadingAction => ({ type: AuthActionEnum.SET_IS_LOADING, payload }),
     setError: (payload: string): SetErrorAction => ({ type: AuthActionEnum.SET_ERROR, payload }),
@@ -39,7 +39,7 @@ export const AuthActionCreators = {
         localStorage.removeItem('login')
         localStorage.removeItem('token')
         localStorage.removeItem('refrsh')
-        dispatch(AuthActionCreators.setUser({} as IUser))
+        dispatch(AuthActionCreators.setUser({} as ILogUser))
         dispatch(AuthActionCreators.setIsAuth(false))
         dispatch(AuthActionCreators.setToken({} as IToken))
         delete axios.defaults.headers.common["Authorization"];

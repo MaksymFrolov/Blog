@@ -2,7 +2,19 @@ import axios, { AxiosResponse } from "axios";
 import { IComment } from "../models/IComment";
 
 export default class CommentService {
-    static async getCommentByPostId(id: number, page?: number, limit?: number): Promise<AxiosResponse<IComment[]>> {
-        return axios.get(`/api/posts/${id}/comments`, { params: { page: page, limit: limit } })
+    static async getCommentsByPostId(id: number, page?: number, limit?: number): Promise<AxiosResponse<IComment[]>> {
+        return axios.get(`/api/posts/${id}/comments`, { params: { page, limit } })
+    }
+    static async getCommentsByUserId(id: number, page?: number, limit?: number): Promise<AxiosResponse<IComment[]>> {
+        return axios.get(`/api/people/${id}/comments`, { params: { page, limit } })
+    }
+    static async addComment(comment: IComment, id:number): Promise<AxiosResponse> {
+        return axios.post(`/api/posts/${id}/comments`, comment)
+    }
+    static async updateComment(comment: IComment, postId: number, commentId: number): Promise<AxiosResponse> {
+        return axios.put(`/api/posts/${postId}/comments/${commentId}`, comment)
+    }
+    static async deleteComment(postId: number, commentId: number): Promise<AxiosResponse> {
+        return axios.delete(`/api/posts/${postId}/comments/${commentId}`)
     }
 }

@@ -23,5 +23,35 @@ export const PostActionCreators = {
         catch (e) {
             dispatch(PostActionCreators.setError((e as Error).message))
         }
+    },
+    addPost: (post: IPost) => async (dispatch: AppDispatch) => {
+        try {
+            dispatch(PostActionCreators.setIsLoading(true))
+            await PostService.addPost(post)
+            dispatch(PostActionCreators.setIsLoading(false))
+        }
+        catch (e) {
+            dispatch(PostActionCreators.setError((e as Error).message))
+        }
+    },
+    updatePost: (post: IPost, id: number) => async (dispatch: AppDispatch) => {
+        try {
+            dispatch(PostActionCreators.setIsLoading(true))
+            await PostService.updatePost(post, id)
+            dispatch(PostActionCreators.setIsLoading(false))
+        }
+        catch (e) {
+            dispatch(PostActionCreators.setError((e as Error).message))
+        }
+    },
+    deletePost: (id: number) => async (dispatch: AppDispatch) => {
+        try {
+            dispatch(PostActionCreators.setIsLoading(true))
+            await PostService.deletePost(id)
+            dispatch(PostActionCreators.setIsLoading(false))
+        }
+        catch (e) {
+            dispatch(PostActionCreators.setError((e as Error).message))
+        }
     }
 }

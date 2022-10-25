@@ -1,5 +1,5 @@
 import { IToken } from "../../../models/IToken"
-import { IUser } from "../../../models/IUser"
+import { ILogUser } from "../../../models/ILogUser"
 import { AuthAction, AuthActionEnum, AuthState } from "./types"
 
 
@@ -7,7 +7,7 @@ const initialState: AuthState = {
     isAuth: false,
     error: '',
     isLoading: false,
-    user: {} as IUser,
+    user: {} as ILogUser,
     token: {} as IToken
 }
 

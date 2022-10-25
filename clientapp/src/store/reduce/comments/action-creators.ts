@@ -16,7 +16,7 @@ export const CommentsActionCreators = {
             if (page != undefined) {
                 dispatch(CommentsActionCreators.setPage(++page))
             }
-            const response = await CommentService.getCommentByPostId(id, page, limit)
+            const response = await CommentService.getCommentsByPostId(id, page, limit)
             const mockComments = response.data
             if (mockComments.length != 0 && comments != undefined) {
                 dispatch(CommentsActionCreators.setComments([...comments, ...mockComments]))

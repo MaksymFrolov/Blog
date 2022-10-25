@@ -1,6 +1,8 @@
 import { AppDispatch } from "../.."
 import RegUserService from "../../../api/RegUserService"
 import { IRegUser } from "../../../models/IRegUser"
+import { IUser } from "../../../models/IUser"
+import { AuthActionCreators } from "../auth/action-creators"
 import { SetErrorAction, SetIsLoadingAction, SetUserAction, UserActionEnum } from "./types"
 
 
@@ -19,6 +21,40 @@ export const UserActionCreators = {
             else {
                 dispatch(UserActionCreators.setError("Not Found."))
             }
+        }
+        catch (e) {
+            dispatch(UserActionCreators.setError((e as Error).message))
+        }
+    },
+    addUser:(user: IUser) => async (dispatch: AppDispatch)=>{
+        try{
+            dispatch(UserActionCreators.setIsLoading(true))
+            await RegUserService.addUser(user)
+            AuthActionCreators.login(user.login,user.password)
+            dispatch(UserActionCreators.setIsLoading(false))
+        }
+        catch (e) {
+            dispatch(UserActionCreators.setError((e as Error).message))
+        }
+    },
+    updateUser:(user: IUser, id: number) => async (dispatch: AppDispatch)=>{
+        try{
+            dispatch(UserActionCreators.setIsLoading(true))
+            await RegUserService.updateUser(user, id)
+            AuthActionCreators.logout()
+            AuthActionCreators.login(user.login,user.password)
+            dispatch(UserActionCreators.setIsLoading(false))
+        }
+        catch (e) {
+            dispatch(UserActionCreators.setError((e as Error).message))
+        }
+    },
+    deleteUser:(id: number) => async (dispatch: AppDispatch)=>{
+        try{
+            dispatch(UserActionCreators.setIsLoading(true))
+            await RegUserService.deleteUser(id)
+            AuthActionCreators.logout()
+            dispatch(UserActionCreators.setIsLoading(false))
         }
         catch (e) {
             dispatch(UserActionCreators.setError((e as Error).message))
