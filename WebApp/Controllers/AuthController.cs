@@ -15,7 +15,7 @@ namespace WebApp.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<AuthenticatedResponseModel>> Login([FromBody] LoginModel loginModel)
+        public async Task<ActionResult<TokenApiModel>> Login([FromBody] LoginModel loginModel)
         {
             try
             {

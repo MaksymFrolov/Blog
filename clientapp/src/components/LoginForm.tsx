@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input } from 'antd'
+import { Button, Checkbox, Form, Input, message } from 'antd'
 import React, { FC, useState } from 'react'
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from '../hooks/useTypedSelector'
@@ -9,17 +9,18 @@ const LoginForm: FC = () => {
   const { error, isLoading } = useTypedSelector(state => state.auth)
   const [username, setLogin] = useState('')
   const [password, setPassword] = useState('')
-  const { login } = useActions(AuthActionCreators)
+  const { login, setError } = useActions(AuthActionCreators)
   const submit = () => {
     login(username, password)
+  }
+  if(error){
+    message.error(error)
+    setError('')
   }
   return (
     <Form
       onFinish={submit}
     >
-      {error && <div style={{ color: 'red' }}>
-        {error}
-      </div>}
       <Form.Item
         label="Username"
         name="username"
@@ -39,9 +40,6 @@ const LoginForm: FC = () => {
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
-      </Form.Item>
-      <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-        <Checkbox>Remember me</Checkbox>
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit" loading={isLoading}>

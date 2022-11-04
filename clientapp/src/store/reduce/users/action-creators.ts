@@ -24,7 +24,7 @@ export const UsersActionCreators = {
             else if (mockUsers.length != 0) {
                 dispatch(UsersActionCreators.setUsers(mockUsers))
             }
-            else {
+            if(mockUsers.length < limit!) {
                 dispatch(UsersActionCreators.setIsEnough(false))
             }
         }

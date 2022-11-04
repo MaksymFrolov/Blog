@@ -24,7 +24,29 @@ export const CommentsActionCreators = {
             else if (mockComments.length != 0) {
                 dispatch(CommentsActionCreators.setComments(mockComments))
             }
-            else {
+            if(mockComments.length < limit!) {
+                dispatch(CommentsActionCreators.setIsEnough(false))
+            }
+        }
+        catch (e) {
+            dispatch(CommentsActionCreators.setError((e as Error).message))
+        }
+    },
+    loadCommentsByPersonId: (id: number, page?: number, limit?: number, comments?: IComment[]) => async (dispatch: AppDispatch) => {
+        try {
+            dispatch(CommentsActionCreators.setStart())
+            if (page != undefined) {
+                dispatch(CommentsActionCreators.setPage(++page))
+            }
+            const response = await CommentService.getCommentsByUserId(id, page, limit)
+            const mockComments = response.data
+            if (mockComments.length != 0 && comments != undefined) {
+                dispatch(CommentsActionCreators.setComments([...comments, ...mockComments]))
+            }
+            else if (mockComments.length != 0) {
+                dispatch(CommentsActionCreators.setComments(mockComments))
+            }
+            if(mockComments.length < limit!) {
                 dispatch(CommentsActionCreators.setIsEnough(false))
             }
         }

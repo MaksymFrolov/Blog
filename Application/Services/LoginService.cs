@@ -17,7 +17,7 @@ namespace Application.Services
             this.token = token;
         }
 
-        public async Task<AuthenticatedResponseModel> Login(LoginModel model)
+        public async Task<TokenApiModel> Login(LoginModel model)
         {
             Validation(model);
 
@@ -42,9 +42,9 @@ namespace Application.Services
 
             await unitOfWork.SaveAsync();
 
-            return new AuthenticatedResponseModel
+            return new TokenApiModel
             {
-                Token = accessToken,
+                AccessToken = accessToken,
                 RefreshToken = refreshToken
             };
         }

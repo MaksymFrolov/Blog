@@ -16,7 +16,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<ActionResult<AuthenticatedResponseModel>> Refresh([FromBody] TokenApiModel tokenApiModel)
+        public async Task<ActionResult<TokenApiModel>> Refresh([FromBody] TokenApiModel tokenApiModel)
         {
             try
             {

@@ -133,8 +133,8 @@ namespace Application.Services
             if (model.FirstName == string.Empty || model.LastName == string.Empty)
                 throw new BlogException("Name is empty.");
 
-            if (DateTime.Now.Year - model.BirthDate.Year < 0 || DateTime.Now.Year - model.BirthDate.Year > 150)
-                throw new BlogException("Date is incorrect.");
+            //if (DateTime.Now.Year - model.BirthDate.Value.Year < 0 || DateTime.Now.Year - model.BirthDate.Year > 150)
+            //    throw new BlogException("Date is incorrect.");
         }
     }
 }

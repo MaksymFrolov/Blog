@@ -84,18 +84,15 @@ namespace WebApp.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<ActionResult> Update(int id, [FromBody] PersonModel model)
         {
-            if (id != model.Id)
-                return BadRequest("Ids don't match.");
-
             try
             {
                 await personService.UpdateAsync(model);
 
-                return Ok(model);
+                return Ok();
             }
             catch (BlogException ex)
             {
-                return BadRequest(ex);
+                return BadRequest();
             }
         }
 

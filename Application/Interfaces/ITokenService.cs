@@ -9,7 +9,7 @@ namespace Application.Interfaces
 {
     public interface ITokenService
     {
-        Task<AuthenticatedResponseModel> Refresh(TokenApiModel tokenApiModel);
+        Task<TokenApiModel> Refresh(TokenApiModel tokenApiModel);
 
         Task Revoke(TokenApiModel tokenApiModel);
     }

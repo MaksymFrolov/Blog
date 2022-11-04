@@ -21,7 +21,7 @@ namespace Application.Services
             this.token = token;
         }
 
-        public async Task<AuthenticatedResponseModel> Refresh(TokenApiModel tokenApiModel)
+        public async Task<TokenApiModel> Refresh(TokenApiModel tokenApiModel)
         {
             Validation(tokenApiModel);
 
@@ -47,9 +47,9 @@ namespace Application.Services
 
             await unitOfWork.SaveAsync();
 
-            return new AuthenticatedResponseModel()
+            return new TokenApiModel()
             {
-                Token = newAccessToken,
+                AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken
             };
         }

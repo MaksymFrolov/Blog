@@ -15,7 +15,7 @@ namespace WebApp.Controllers
             this.postService = postService;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<ActionResult<IEnumerable<PostModel>>> Get([FromQuery] PostFilterSearchModel filter)
         {
             return Ok(await postService.GetAllPostWithFilterAsync(filter));
@@ -63,10 +63,8 @@ namespace WebApp.Controllers
         }
 
         [HttpPost("{id}/comments"), Authorize]
-        public async Task<ActionResult> Add(int id, [FromBody] CommentModel comment)
+        public async Task<ActionResult> AddComment(int id, [FromBody] CommentModel comment)
         {
-            comment.Id = id;
-
             try
             {
                 await postService.AddCommentAsync(comment);

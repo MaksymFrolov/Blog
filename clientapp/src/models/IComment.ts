@@ -1,7 +1,7 @@
 export interface IComment {
     id: number
     postId: number
-    createdDate: Date
+    dateCreated: Date
     content: string
     personId: number
 }

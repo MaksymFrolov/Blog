@@ -1,4 +1,4 @@
-import { Card, Divider, Layout, List, Row } from 'antd'
+import { Card, Divider, Layout, List, message, Row } from 'antd'
 import {MessageOutlined, ContainerOutlined} from '@ant-design/icons'
 import React,{FC, useEffect} from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -9,14 +9,19 @@ import { CommentsActionCreators } from '../store/reduce/comments/action-creators
 import { PostsActionCreators } from '../store/reduce/posts/action-creators'
 import { UsersActionCreators } from '../store/reduce/users/action-creators'
 import { IRegUser } from '../models/IRegUser'
+import { convertDate } from '../utils/convertDate'
 
 const People: FC = () => {
   const navigate = useNavigate()
   const { error, isLoading, users, page, enough } = useTypedSelector(state => state.users)
-  const { loadUsers } = useActions(UsersActionCreators)
+  const { loadUsers, setError } = useActions(UsersActionCreators)
   useEffect(() => {
     loadUsers(-1, 5)
   }, [])
+  if(error){
+    message.error(error)
+    setError('')
+  }
   return (
     <Layout
       id='scrollableDiv'
@@ -25,9 +30,6 @@ const People: FC = () => {
         overflow: 'auto'
       }}
     >
-      {error && <div style={{ color: 'red' }}>
-        {error}
-      </div>}
       <Row justify='center' align='middle'>
         <InfiniteScroll
           dataLength={users.length}
@@ -41,9 +43,6 @@ const People: FC = () => {
         >
           <List
             loading={isLoading}
-            // grid={{
-            //   column:2
-            // }}
             dataSource={users}
             renderItem={item => (
               <Row justify='center' align='middle'>
@@ -55,7 +54,7 @@ const People: FC = () => {
                     style={{ width: 300, marginRight: 15, marginLeft: 15 }}>
                     <p>{item.firstName}</p>
                     <p>{item.lastName}</p>
-                    <p>{new Date(item.birthDate).getDate()}</p>
+                    <p>{convertDate(item.birthDate)}</p>
                     <Divider plain style={{ marginBottom: 5 }} />
                     <MessageOutlined style={{ marginRight: 5 }} />
                     {item.commentIds.length}

@@ -1,6 +1,10 @@
+import axios, { AxiosError } from "axios"
 import { AppDispatch } from "../.."
 import PostService from "../../../api/PostService"
+import TokenService from "../../../api/TokenService"
 import { IPost } from "../../../models/IPost"
+import { IToken } from "../../../models/IToken"
+import { AuthActionCreators } from "../auth/action-creators"
 import { PostsActionEnum, SetErrorAction, SetIsEnoughAction, SetPageAction, SetPostsAction, SetStartAction } from "./types"
 
 
@@ -24,7 +28,7 @@ export const PostsActionCreators = {
             else if (mockPosts.length != 0) {
                 dispatch(PostsActionCreators.setPosts(mockPosts))
             }
-            else {
+            if (mockPosts.length < limit!) {
                 dispatch(PostsActionCreators.setIsEnough(false))
             }
         }

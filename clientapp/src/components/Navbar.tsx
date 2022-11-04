@@ -1,5 +1,5 @@
 import { Layout, Row, Menu } from 'antd'
-import React,{FC} from 'react'
+import React, { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from '../hooks/useTypedSelector'
@@ -31,28 +31,44 @@ const Navbar: FC = () => {
             onClick: () => navigate(RouteNames.LOGIN),
             label: "Login"
         },
+        {
+            key: 5,
+            onClick: () => navigate(RouteNames.REGISTRATION),
+            label: "Registration"
+        },
     ]
     const privateMenuItems = [
         {
             key: 1,
+            label: user.login,
+            children: [
+                {
+                    label: 'Profile',
+                    key: 2,
+                    onClick: () => navigate(`/people/${localStorage.getItem('id')}`)
+                },
+                {
+                    label: 'Logout',
+                    key: 3,
+                    onClick: () => logout()
+                }
+            ],
+        },
+        {
+            key: 4,
             onClick: () => navigate(RouteNames.HOME),
             label: "Home"
         },
         {
-            key: 2,
+            key: 5,
             onClick: () => navigate(RouteNames.POSTS),
             label: "Posts"
         },
         {
-            key: 3,
+            key: 6,
             onClick: () => navigate(RouteNames.PEOPLE),
             label: "People"
         },
-        {
-            key: 4,
-            onClick: () => logout(),
-            label: "Logout"
-        }
     ]
     return (
         <Layout.Header>
@@ -60,12 +76,7 @@ const Navbar: FC = () => {
                 {
                     isAuth
                         ?
-                        <>
-                            <div style={{ color: 'white' }}>
-                                {user.login}
-                            </div>
-                            <Menu theme="dark" mode='horizontal' selectable={false} items={privateMenuItems} />
-                        </>
+                        <Menu theme="dark" mode='horizontal' selectable={false} items={privateMenuItems} />
                         :
                         <Menu theme="dark" mode="horizontal" selectable={false} items={publicMenuItems} />
                 }

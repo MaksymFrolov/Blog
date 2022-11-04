@@ -6,7 +6,7 @@
 
         public string? Content { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public int PersonId { get; set; }
 

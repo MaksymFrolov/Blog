@@ -1,45 +1,47 @@
-import { Card, Divider, Layout, List, Row } from 'antd'
-import {MessageOutlined} from '@ant-design/icons'
-import React, {FC, useEffect} from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import { Button, Card, Divider, Empty, Layout, List, message, Modal, Row } from 'antd'
+import React, { FC, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from '../hooks/useTypedSelector'
-import { IPost } from '../models/IPost'
-import { CommentsActionCreators } from '../store/reduce/comments/action-creators'
 import { PostActionCreators } from '../store/reduce/post/action-creators'
 import { UsersActionCreators } from '../store/reduce/users/action-creators'
+import CommentForm from '../components/CommentForm'
+import { convertDateWithTime } from '../utils/convertDate'
+import CommentList, { CommentListEnum } from '../components/CommentList'
+import PostService from '../api/PostService'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import PostForm from '../components/PostForm'
 
 const Post: FC = () => {
   const navigate = useNavigate()
   const param = useParams()
+  const { isAuth } = useTypedSelector(state => state.auth)
   const { post, isLoading, error } = useTypedSelector(t => t.post)
-  const { comments, error: commentError, page, enough, isLoading: commentIsLoading } = useTypedSelector(t => t.comments)
   const { users } = useTypedSelector(t => t.users)
-  const { loadPost } = useActions(PostActionCreators)
-  const { loadCommentsByPostId } = useActions(CommentsActionCreators)
+  const { loadPost, setError } = useActions(PostActionCreators)
   const { loadUsers } = useActions(UsersActionCreators)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     loadPost(param.id)
-    loadCommentsByPostId(param.id,0, 5, [])
     loadUsers()
   }, [])
   const findUser = (id: number) => {
     const user = users.find(t => t.id === id)
     return user?.firstName
   }
+  if (error) {
+    message.error(error)
+    setError('')
+  }
   return (
     <Layout
-    id='scrollableDiv'
-    style={{
-      height: 'calc(100vh - 64px)',
-      overflow: 'auto'
-    }}
+      id='scrollableDiv'
+      style={{
+        height: 'calc(100vh - 64px)',
+        overflow: 'auto'
+      }}
     >
       <Row justify='center' style={{ marginTop: 50 }}>
-        {error && <div style={{ color: 'red' }}>
-          {error}
-        </div>}
         <Card
           hoverable
           title={post.title}
@@ -53,50 +55,63 @@ const Post: FC = () => {
           <p>
             {post.content}
           </p>
-          <Divider plain style={{ marginBottom: 5 }} />
-          <div style={{ display: 'flex', justifyContent: 'end' }}>
-              Posted: <>
-                {
-                  post.dateCreated
-                }
-              </>
+          <Divider plain style={{ marginBottom: 15 }} />
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <>
+              {
+                post.personId == parseInt(localStorage.getItem('id')!) &&
+                <>
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    onClick={() => {
+                      PostService.deletePost(post.id)
+                      navigate(-1)
+                    }}
+                    icon={<DeleteOutlined />}
+                  />
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    onClick={() => setIsModalOpen(true)}
+                    icon={<EditOutlined />}
+                  />
+                  <Modal
+                    width={900}
+                    title="Post Form"
+                    open={isModalOpen}
+                    onCancel={() => setIsModalOpen(false)}
+                    footer={[
+                      <Button type="primary" htmlType="submit" form="postForm" key="submit">
+                        Submit
+                      </Button>
+                    ]}
+                  >
+                    <PostForm personId={parseInt(localStorage.getItem('id')!)} post={post} />
+                  </Modal>
+                </>
+              }
+            </>
+            Posted: <>
+              {
+                convertDateWithTime(post.dateCreated)
+              }
+            </>
           </div>
         </Card>
+        {isAuth &&
+          <>
+            <Divider plain>
+              Write a comment
+            </Divider>
+            <CommentForm
+              postId={parseInt(param.id!)}
+              personId={parseInt(localStorage.getItem('id')!)}
+            />
+          </>
+        }
         <Divider plain>Comments</Divider>
-        {commentError && <div style={{ color: 'red' }}>
-          {commentError}
-        </div>}
-        <InfiniteScroll
-          dataLength={comments.length}
-          next={() => {
-            loadCommentsByPostId(param.id, page, 5, comments)
-          }}
-          hasMore={enough}
-          loader={<Card style={{ width: 600, marginBottom: 15, marginTop: 15 }} loading={true} />}
-          endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-          scrollableTarget="scrollableDiv"
-        >
-          <List
-            loading={commentIsLoading}
-            dataSource={comments.filter(t => t.postId === post.id)}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                <Card
-                  hoverable
-                  title={<>Posted: {item.createdDate}</>}
-                  style={{ width: 600 }}
-                  extra={
-                    <a onClick={() => { navigate(`/people/${item.personId}`) }}>
-                      {findUser(item.personId)}
-                    </a>
-                  }
-                >
-                  <p>{item.content}</p>
-                </Card>
-              </List.Item>
-            )}
-          />
-        </InfiniteScroll>
+        {post.id && post.commentIds.length != 0 ? <CommentList type={CommentListEnum.BY_POST} /> : <Empty />}
       </Row>
     </Layout>
   )
